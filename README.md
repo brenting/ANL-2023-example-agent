@@ -1,7 +1,8 @@
 # Automated Negotiation League 2022
 Join our [Discord server](https://discord.gg/qvXK3DJTuz)!
+Read the [Call for Participants](docs/ANL_2022_CfP.pdf)!
 
-This is a template repository for the Agent Negotiation League (ANL) of [ANAC](http://ii.tudelft.nl/nego/node/7) which will be held at IJCAI 2022. See also the [Call for Participants](docs/ANL_2022_CfP.pdf) of this competition.
+This is a template repository for the Agent Negotiation League (ANL) of [ANAC](http://ii.tudelft.nl/nego/node/7) which will be held at IJCAI 2022. 
 
 ## Overview
 - directories:
