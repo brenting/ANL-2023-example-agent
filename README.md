@@ -1,0 +1,36 @@
+# Automated Negotiation League 2022
+Join our [Discord server](https://discord.gg/qvXK3DJTuz)!
+
+This is a template repository for the Agent Negotiation League (ANL) of [ANAC](http://ii.tudelft.nl/nego/node/7) which will be held at IJCAI 2022. See also the [Call for Participants](docs/ANL_2022_CfP.pdf) of this competition.
+
+## Overview
+- directories:
+    - `agents`: Contains directories with the agents. The `template_agent` directory contains the template for this competition.
+    - `domains`: Contains the domains which are problems over which the agents are supposed to negotiate.
+    - `utils`: Arbitrary utilities to run sessions and process results.
+- files:
+    - `run.py`: Main interface to test agents in single session runs.
+    - `run_tournament.py`: Main interface to test a set of agents in a tournament. Here, every agent will negotiate against every other agent in the set on every set of preferences profiles that is provided (see code).
+    - `requirements.txt`: Python dependencies for this template repository.
+    - `requirements_allowed.txt`: Additional dependencies that you can use. Send me a message (Discord/mail) in case you require an unlisted dependency. I will then add a compatible version to the allowed dependencies list.
+
+## Installation
+Download or clone this repository. *Note that if you fork this repository you cannot make it private*, which is default behaviour of GitHub. This will cause your code to be publicly visible if you push it to your forked repository.
+
+We recommend using Python 3.9 as this version will be used during the actual competition. The required dependencies are listed in the `requirements.txt` file and can be installed through `pip install -r requirements.txt`. We advise you to create a Python virtual environment to install the dependencies in isolation (e.g. `python3.9 -m venv .venv`, see also [here](https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/#creating-a-virtual-environment))
+
+As already mentioned, should you need any additional dependencies, please notify me. A few of the most common dependencies are already listed in `requirements_allowed.txt` file. 
+
+For VSCode devcontainer users: We included a devcontainer specification in the `.devcontainer` directory.
+
+## Quickstart
+- Copy and rename the template agent's directory, files and classname.
+- Read through the code to familiarise yourself with its workings. The agent already works but is not very good.
+- Develop your agent in the copied directory. Make sure that all the files that you use are in the directory.
+- Test your agent through `run.py`, results will be returned as dictionaries and saved as json-file. A plot of the negotiation trace will also be saved.
+- You can also test your agent more extensively by running a tournament with a set of agents. Use the `run_tournament.py` script for this. Summaries of the results will be saved to the results directory.
+
+## Documentation
+The code of GeniusWebPython is properly documented. Exploring the class definitions of the classes used in the template agent is usually sufficient to understand how to work with them.
+
+[More documentation can be found here](https://tracinsy.ewi.tudelft.nl/pubtrac/GeniusWebPython/wiki/WikiStart). This documentation was written for the Java version of GeniusWeb, but classes and functionality are identical as much as possible.

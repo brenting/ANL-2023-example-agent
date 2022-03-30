@@ -1,0 +1,7 @@
+.venv
+.vscode
+__pycache__
+
+results
+agent_storage
+*.log

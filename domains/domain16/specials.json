@@ -1,0 +1,234 @@
+{
+  "size": 3381,
+  "opposition": 0.28695602605359927,
+  "nash": {
+    "bid": {
+      "issueA": "valueA",
+      "issueB": "valueF",
+      "issueC": "valueG",
+      "issueD": "valueL"
+    },
+    "utility": [
+      0.7886313304000001,
+      0.80592
+    ]
+  },
+  "kalai": {
+    "bid": {
+      "issueA": "valueA",
+      "issueB": "valueF",
+      "issueC": "valueG",
+      "issueD": "valueL"
+    },
+    "utility": [
+      0.7886313304000001,
+      0.80592
+    ]
+  },
+  "pareto_front": [
+    {
+      "bid": {
+        "issueA": "valueB",
+        "issueB": "valueF",
+        "issueC": "valueG",
+        "issueD": "valueL"
+      },
+      "utility": [
+        0.045660783200000006,
+        1.0
+      ]
+    },
+    {
+      "bid": {
+        "issueA": "valueB",
+        "issueB": "valueC",
+        "issueC": "valueG",
+        "issueD": "valueL"
+      },
+      "utility": [
+        0.0658315385,
+        0.9549375471999999
+      ]
+    },
+    {
+      "bid": {
+        "issueA": "valueB",
+        "issueB": "valueF",
+        "issueC": "valueC",
+        "issueD": "valueL"
+      },
+      "utility": [
+        0.13093550240000001,
+        0.9055872
+      ]
+    },
+    {
+      "bid": {
+        "issueA": "valueB",
+        "issueB": "valueC",
+        "issueC": "valueC",
+        "issueD": "valueL"
+      },
+      "utility": [
+        0.1511062577,
+        0.8605247471999999
+      ]
+    },
+    {
+      "bid": {
+        "issueA": "valueA",
+        "issueB": "valueF",
+        "issueC": "valueG",
+        "issueD": "valueL"
+      },
+      "utility": [
+        0.7886313304000001,
+        0.80592
+      ]
+    },
+    {
+      "bid": {
+        "issueA": "valueA",
+        "issueB": "valueC",
+        "issueC": "valueG",
+        "issueD": "valueL"
+      },
+      "utility": [
+        0.8088020857000001,
+        0.7608575472000001
+      ]
+    },
+    {
+      "bid": {
+        "issueA": "valueA",
+        "issueB": "valueF",
+        "issueC": "valueC",
+        "issueD": "valueL"
+      },
+      "utility": [
+        0.8739060496000001,
+        0.7115072
+      ]
+    },
+    {
+      "bid": {
+        "issueA": "valueA",
+        "issueB": "valueC",
+        "issueC": "valueC",
+        "issueD": "valueL"
+      },
+      "utility": [
+        0.8940768049000001,
+        0.6664447471999999
+      ]
+    },
+    {
+      "bid": {
+        "issueA": "valueA",
+        "issueB": "valueF",
+        "issueC": "valueC",
+        "issueD": "valueU"
+      },
+      "utility": [
+        0.8982734523,
+        0.6090381648000001
+      ]
+    },
+    {
+      "bid": {
+        "issueA": "valueA",
+        "issueB": "valueF",
+        "issueC": "valueC",
+        "issueD": "valueH"
+      },
+      "utility": [
+        0.9026377897000001,
+        0.569292295
+      ]
+    },
+    {
+      "bid": {
+        "issueA": "valueA",
+        "issueB": "valueC",
+        "issueC": "valueC",
+        "issueD": "valueU"
+      },
+      "utility": [
+        0.9184442076,
+        0.563975712
+      ]
+    },
+    {
+      "bid": {
+        "issueA": "valueA",
+        "issueB": "valueB",
+        "issueC": "valueC",
+        "issueD": "valueL"
+      },
+      "utility": [
+        0.9226682329000001,
+        0.5407831052000001
+      ]
+    },
+    {
+      "bid": {
+        "issueA": "valueA",
+        "issueB": "valueC",
+        "issueC": "valueC",
+        "issueD": "valueH"
+      },
+      "utility": [
+        0.9228085450000001,
+        0.5242298422
+      ]
+    },
+    {
+      "bid": {
+        "issueA": "valueA",
+        "issueB": "valueC",
+        "issueC": "valueC",
+        "issueD": "valueK"
+      },
+      "utility": [
+        0.9329452994,
+        0.5032390752
+      ]
+    },
+    {
+      "bid": {
+        "issueA": "valueA",
+        "issueB": "valueF",
+        "issueC": "valueC",
+        "issueD": "valueR"
+      },
+      "utility": [
+        0.9512378167000001,
+        0.4929672
+      ]
+    },
+    {
+      "bid": {
+        "issueA": "valueA",
+        "issueB": "valueC",
+        "issueC": "valueC",
+        "issueD": "valueR"
+      },
+      "utility": [
+        0.9714085720000001,
+        0.44790474719999995
+      ]
+    },
+    {
+      "bid": {
+        "issueA": "valueA",
+        "issueB": "valueB",
+        "issueC": "valueC",
+        "issueD": "valueR"
+      },
+      "utility": [
+        1.0,
+        0.3222431052
+      ]
+    }
+  ]
+}

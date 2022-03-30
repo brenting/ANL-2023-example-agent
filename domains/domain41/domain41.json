@@ -1,0 +1,59 @@
+{
+  "name": "domain41",
+  "issuesValues": {
+    "issueA": {
+      "values": [
+        "valueA",
+        "valueB",
+        "valueC",
+        "valueD"
+      ]
+    },
+    "issueB": {
+      "values": [
+        "valueA",
+        "valueB",
+        "valueC",
+        "valueD",
+        "valueE",
+        "valueF",
+        "valueG",
+        "valueH",
+        "valueI"
+      ]
+    },
+    "issueC": {
+      "values": [
+        "valueA",
+        "valueB",
+        "valueC",
+        "valueD",
+        "valueE",
+        "valueF",
+        "valueG",
+        "valueH"
+      ]
+    },
+    "issueD": {
+      "values": [
+        "valueA",
+        "valueB"
+      ]
+    },
+    "issueE": {
+      "values": [
+        "valueA",
+        "valueB",
+        "valueC",
+        "valueD"
+      ]
+    },
+    "issueF": {
+      "values": [
+        "valueA",
+        "valueB",
+        "valueC"
+      ]
+    }
+  }
+}

@@ -1,0 +1,9 @@
+https://tracinsy.ewi.tudelft.nl/pubtrac/GeniusWebPython/export/86/geniuswebcore/dist/geniusweb-1.2.0.tar.gz
+numpy==1.22.3
+pandas==1.4.1
+plotly==5.6.0
+scikit-learn==1.0.2
+scipy==1.8.0
+tensorboard==2.8.0
+tensorflow==2.8.0
+torch==1.11.0

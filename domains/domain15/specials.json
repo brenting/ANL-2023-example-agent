@@ -1,0 +1,71 @@
+{
+  "size": 512,
+  "opposition": 0.095565056209445,
+  "nash": {
+    "bid": {
+      "issueA": "valueC",
+      "issueB": "valueB",
+      "issueC": "valueA",
+      "issueD": "valueA",
+      "issueE": "valueB"
+    },
+    "utility": [
+      0.9154542876999999,
+      0.95545
+    ]
+  },
+  "kalai": {
+    "bid": {
+      "issueA": "valueC",
+      "issueB": "valueB",
+      "issueC": "valueA",
+      "issueD": "valueA",
+      "issueE": "valueB"
+    },
+    "utility": [
+      0.9154542876999999,
+      0.95545
+    ]
+  },
+  "pareto_front": [
+    {
+      "bid": {
+        "issueA": "valueC",
+        "issueB": "valueB",
+        "issueC": "valueA",
+        "issueD": "valueA",
+        "issueE": "valueA"
+      },
+      "utility": [
+        0.6221242877,
+        1.0
+      ]
+    },
+    {
+      "bid": {
+        "issueA": "valueC",
+        "issueB": "valueB",
+        "issueC": "valueA",
+        "issueD": "valueA",
+        "issueE": "valueB"
+      },
+      "utility": [
+        0.9154542876999999,
+        0.95545
+      ]
+    },
+    {
+      "bid": {
+        "issueA": "valueF",
+        "issueB": "valueB",
+        "issueC": "valueA",
+        "issueD": "valueA",
+        "issueE": "valueB"
+      },
+      "utility": [
+        1.0,
+        0.7622315941
+      ]
+    }
+  ]
+}

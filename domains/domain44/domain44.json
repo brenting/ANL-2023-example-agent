@@ -1,0 +1,51 @@
+{
+  "name": "domain44",
+  "issuesValues": {
+    "issueA": {
+      "values": [
+        "valueA",
+        "valueB"
+      ]
+    },
+    "issueB": {
+      "values": [
+        "valueA",
+        "valueB",
+        "valueC"
+      ]
+    },
+    "issueC": {
+      "values": [
+        "valueA",
+        "valueB"
+      ]
+    },
+    "issueD": {
+      "values": [
+        "valueA",
+        "valueB"
+      ]
+    },
+    "issueE": {
+      "values": [
+        "valueA",
+        "valueB",
+        "valueC",
+        "valueD",
+        "valueE",
+        "valueF",
+        "valueG",
+        "valueH",
+        "valueI",
+        "valueJ",
+        "valueK"
+      ]
+    },
+    "issueF": {
+      "values": [
+        "valueA",
+        "valueB"
+      ]
+    }
+  }
+}

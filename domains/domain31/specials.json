@@ -1,0 +1,114 @@
+{
+  "size": 3264,
+  "opposition": 0.04862972695501592,
+  "nash": {
+    "bid": {
+      "issueA": "valueA",
+      "issueB": "valueL",
+      "issueC": "valueB",
+      "issueD": "valueH"
+    },
+    "utility": [
+      0.99543865,
+      0.94749272
+    ]
+  },
+  "kalai": {
+    "bid": {
+      "issueA": "valueA",
+      "issueB": "valueK",
+      "issueC": "valueB",
+      "issueD": "valueH"
+    },
+    "utility": [
+      0.968503786,
+      0.9629481599999999
+    ]
+  },
+  "pareto_front": [
+    {
+      "bid": {
+        "issueA": "valueA",
+        "issueB": "valueI",
+        "issueC": "valueB",
+        "issueD": "valueH"
+      },
+      "utility": [
+        0.49169547760000004,
+        1.0
+      ]
+    },
+    {
+      "bid": {
+        "issueA": "valueA",
+        "issueB": "valueS",
+        "issueC": "valueB",
+        "issueD": "valueH"
+      },
+      "utility": [
+        0.6346441062,
+        0.9956851999999999
+      ]
+    },
+    {
+      "bid": {
+        "issueA": "valueA",
+        "issueB": "valueA",
+        "issueC": "valueB",
+        "issueD": "valueH"
+      },
+      "utility": [
+        0.8811797325999999,
+        0.98157096
+      ]
+    },
+    {
+      "bid": {
+        "issueA": "valueA",
+        "issueB": "valueK",
+        "issueC": "valueB",
+        "issueD": "valueH"
+      },
+      "utility": [
+        0.968503786,
+        0.9629481599999999
+      ]
+    },
+    {
+      "bid": {
+        "issueA": "valueA",
+        "issueB": "valueL",
+        "issueC": "valueB",
+        "issueD": "valueH"
+      },
+      "utility": [
+        0.99543865,
+        0.94749272
+      ]
+    },
+    {
+      "bid": {
+        "issueA": "valueA",
+        "issueB": "valueL",
+        "issueC": "valueB",
+        "issueD": "valueB"
+      },
+      "utility": [
+        0.9958240679,
+        0.6163502912
+      ]
+    },
+    {
+      "bid": {
+        "issueA": "valueA",
+        "issueB": "valueL",
+        "issueC": "valueB",
+        "issueD": "valueI"
+      },
+      "utility": [
+        1.0,
+        0.4503192256
+      ]
+    }
+  ]
+}
