@@ -44,6 +44,7 @@ class TemplateAgent(DefaultParty):
         self.profile: LinearAdditiveUtilitySpace = None
         self.progress: ProgressTime = None
         self.me: PartyId = None
+        self.other: str = None
         self.settings: Settings = None
         self.storage_dir: str = None
 
@@ -88,6 +89,10 @@ class TemplateAgent(DefaultParty):
 
             # ignore action if it is our action
             if actor != self.me:
+                # obtain the name of the opponent, cutting of the position ID.
+                self.other = str(actor).rsplit("_", 1)[0]
+
+                # process action done by opponent
                 self.opponent_action(action)
         # YourTurn notifies you that it is your turn to act
         elif isinstance(data, YourTurn):
