@@ -9,7 +9,7 @@ RESULTS_DIR = Path("results", time.strftime('%Y%m%d-%H%M%S'))
 
 # create results directory if it does not exist
 if not RESULTS_DIR.exists():
-    RESULTS_DIR.mkdir()
+    RESULTS_DIR.mkdir(parents=True)
 
 # Settings to run a negotiation session:
 #   You need to specify the classpath of 2 agents to start a negotiation. Parameters for the agent can be added as a dict (see example)
