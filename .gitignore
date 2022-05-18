@@ -2,6 +2,9 @@
 .vscode
 __pycache__
 
-results
 agent_storage
+logs
+results
+
+*.sbatch
 *.log
