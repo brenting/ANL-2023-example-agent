@@ -7,3 +7,4 @@ scipy==1.8.0
 tensorboard==2.8.0
 tensorflow==2.8.0
 torch==1.11.0
+lightgbm==3.3.2
