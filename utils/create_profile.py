@@ -1,10 +1,12 @@
 import json
-from math import sqrt
+import math
 import os
 from itertools import product
+from math import sqrt
 from random import randint
 from shutil import rmtree
 from string import ascii_uppercase
+from typing import Iterable
 
 import numpy as np
 import plotly.graph_objects as go
@@ -93,7 +95,7 @@ class Profile:
     def get_issues_values(self):
         return self.profile["LinearAdditiveUtilitySpace"]["domain"]["issuesValues"]
 
-    def get_utility(self, bid):
+    def get_utility(self, bid: dict[str, str]):
         return sum(
             self.issue_weights[i] * self.value_weights[i][v] for i, v in bid.items()
         )
@@ -105,18 +107,22 @@ class Domain:
         domain,
         profile_A: Profile,
         profile_B: Profile,
+        SW_bid=None,
         nash_bid=None,
         kalai_bid=None,
         pareto_front=None,
+        distribution=None,
         opposition=None,
         visualisation=None,
     ):
         self.domain = domain
         self.profile_A = profile_A
         self.profile_B = profile_B
+        self.SW_bid = SW_bid
         self.nash_bid = nash_bid
         self.kalai_bid = kalai_bid
         self.pareto_front = pareto_front
+        self.distribution = distribution
         self.opposition = opposition
         self.visualisation = visualisation
 
@@ -127,7 +133,7 @@ class Domain:
         #     return {"values": values}
 
         domain_size = randint(200, 10000)
-        print(name)
+
         # print(domain_size)
         while True:
             num_issues = randint(4, 10)
@@ -151,7 +157,7 @@ class Domain:
         return cls(domain, profile_A, profile_B)
 
     @classmethod
-    def from_directory(cls, directory):
+    def from_directory(cls, directory) -> Domain:
         name = os.path.basename(directory)
         profile_B = Profile.from_file(f"{directory}/profileB.json")
         profile_A = Profile.from_file(f"{directory}/profileA.json")
@@ -165,9 +171,12 @@ class Domain:
                 domain,
                 profile_A,
                 profile_B,
-                specials["nash"],
-                specials["kalai"],
-                specials["pareto_front"],
+                SW_bid=specials["social_welfare"],
+                nash_bid=specials["nash"],
+                kalai_bid=specials["kalai"],
+                pareto_front=specials["pareto_front"],
+                distribution=specials["distribution"],
+                opposition=specials["opposition"],
             )
         else:
             domain = cls(domain, profile_A, profile_B)
@@ -177,7 +186,9 @@ class Domain:
         if self.nash_bid:
             return False
         self.pareto_front = self.get_pareto(list(self.iter_bids()))
+        self.distribution = self.get_distribution(self.iter_bids())
 
+        SW_utility = 0
         nash_utility = 0
         kalai_diff = 10
 
@@ -186,6 +197,7 @@ class Domain:
 
             utility_diff = abs(utility_A - utility_B)
             utility_prod = utility_A * utility_B
+            utility_sum = utility_A + utility_B
 
             if utility_diff < kalai_diff:
                 self.kalai_bid = pareto_bid
@@ -194,6 +206,9 @@ class Domain:
             if utility_prod > nash_utility:
                 self.nash_bid = pareto_bid
                 nash_utility = utility_prod
+            if utility_sum > SW_utility:
+                self.SW_bid = pareto_bid
+                SW_utility = utility_sum
 
         return True
 
@@ -256,7 +271,7 @@ class Domain:
 
         fig.update_layout(
             title=dict(
-                text=f"{self.get_name()}<br><sub>(size: {len(list(self.iter_bids()))}, opposition: {self.opposition:.4f})</sub>",
+                text=f"{self.get_name()}<br><sub>(size: {len(list(self.iter_bids()))}, opposition: {self.opposition:.4f}, distribution: {self.distribution:.4f})</sub>",
                 x=0.5,
                 xanchor="center",
             )
@@ -282,6 +297,8 @@ class Domain:
                         {
                             "size": len(list(self.iter_bids())),
                             "opposition": self.opposition,
+                            "distribution": self.distribution,
+                            "social_welfare": self.SW_bid,
                             "nash": self.nash_bid,
                             "kalai": self.kalai_bid,
                             "pareto_front": self.pareto_front,
@@ -292,10 +309,10 @@ class Domain:
 
         if self.visualisation:
             self.visualisation.write_image(
-                file=os.path.join(path, "visualisation.png"), scale=5
+                file=os.path.join(path, "visualisation.pdf"), scale=5
             )
 
-    def iter_bids(self):
+    def iter_bids(self) -> Iterable:
         return iter(self)
 
     def get_utilities(self, bid):
@@ -340,6 +357,17 @@ class Domain:
 
         return pareto_front
 
+    def get_distribution(self, bids_iter) -> float:
+        min_distance_sum = .0
+
+        for i, bid in enumerate(bids_iter):
+            min_distance = self.distance_to_pareto(bid)            
+            min_distance_sum += min_distance
+
+        distribution = min_distance_sum / (i + 1)
+
+        return distribution
+
     def _dominates(self, bid, candidate_bid):
         if self.profile_A.get_utility(bid) < self.profile_A.get_utility(candidate_bid):
             return False
@@ -349,6 +377,39 @@ class Domain:
             return False
         else:
             return True
+
+    def distance_to_pareto(self, bid):
+        if not self.pareto_front:
+            raise ValueError("Pareto front not calculated")
+
+        min_distance = 5.0
+        for pareto_element in self.pareto_front:
+            pareto_bid = pareto_element["bid"]
+            distance = self.distance(pareto_bid, bid)
+            if distance < min_distance:
+                min_distance = distance
+        
+        return min_distance
+
+    def distance(self, bid1, bid2=None):
+        """calculate Euclidian distance in terms of utility between a bid and 0 or between two bids.
+
+        Args:
+            bid1 (dict[str, str]): bid dictionary where keys are issues and values are the values
+            bid2 (dict[str, str], optional): see bid1. Defaults to None.
+
+        Returns:
+            float: Euclidian distance
+        """
+        if bid2 and bid1:
+            a = (self.profile_A.get_utility(bid1) - self.profile_A.get_utility(bid2)) ** 2
+            b = (self.profile_B.get_utility(bid1) - self.profile_B.get_utility(bid2)) ** 2
+        elif bid1:
+            a = self.profile_A.get_utility(bid1) ** 2
+            b = self.profile_B.get_utility(bid1) ** 2
+        else:
+            raise ValueError("receive None bid")
+        return math.sqrt(a + b)
 
     def get_name(self):
         return self.domain["name"]
