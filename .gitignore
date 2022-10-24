@@ -8,3 +8,6 @@ results
 
 *.sbatch
 *.log
+
+domains/ANAC*
+work_dir
