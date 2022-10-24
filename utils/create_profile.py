@@ -157,7 +157,7 @@ class Domain:
         return cls(domain, profile_A, profile_B)
 
     @classmethod
-    def from_directory(cls, directory) -> Domain:
+    def from_directory(cls, directory):
         name = os.path.basename(directory)
         profile_B = Profile.from_file(f"{directory}/profileB.json")
         profile_A = Profile.from_file(f"{directory}/profileA.json")
