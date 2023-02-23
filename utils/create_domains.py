@@ -75,7 +75,8 @@ class Profile:
             value_weights[issue] = dirichlet_dist(values, "values", alpha=1)
 
         issue_utilities = {
-            i: {"DiscreteValueSetUtilities": {"valueUtilities": value_weights[i]}} for i in issues
+            i: {"DiscreteValueSetUtilities": {"valueUtilities": value_weights[i]}}
+            for i in issues
         }
         profile = {
             "LinearAdditiveUtilitySpace": {
@@ -354,10 +355,10 @@ class Domain:
         return pareto_front
 
     def get_distribution(self, bids_iter) -> float:
-        min_distance_sum = .0
+        min_distance_sum = 0.0
 
         for i, bid in enumerate(bids_iter):
-            min_distance = self.distance_to_pareto(bid)            
+            min_distance = self.distance_to_pareto(bid)
             min_distance_sum += min_distance
 
         distribution = min_distance_sum / (i + 1)
@@ -384,7 +385,7 @@ class Domain:
             distance = self.distance(pareto_bid, bid)
             if distance < min_distance:
                 min_distance = distance
-        
+
         return min_distance
 
     def distance(self, bid1, bid2=None):
