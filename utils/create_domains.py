@@ -12,10 +12,12 @@ import numpy as np
 import plotly.graph_objects as go
 from numpy.random import dirichlet
 
+NUM_DOMAINS_TO_GENERATE = 50
+
 
 def main():
-    for i in range(50):
-        domain = Domain.create_random(f"domain{i:02d}")
+    for i in range(NUM_DOMAINS_TO_GENERATE):
+        domain = Domain.create_random(f"domain{i:03d}")
         domain.calculate_specials()
         domain.generate_visualisation()
         domain.to_file("domains/")
