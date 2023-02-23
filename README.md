@@ -1,8 +1,8 @@
-# Automated Negotiation League 2022
+# Automated Negotiation League 2023
 Join our [Discord server](https://discord.gg/qvXK3DJTuz)!
-Read the [Call for Participants](docs/ANL_2022_CfP.pdf)!
+Read the [Call for Participants](docs/ANL_2023_CfP.pdf)!
 
-This is a template repository for the Agent Negotiation League (ANL) of [ANAC](https://web.tuat.ac.jp/~katfuji/ANAC2022/index.html) which will be held at IJCAI 2022. 
+This is a template repository for the Agent Negotiation League (ANL) of [ANAC](https://web.tuat.ac.jp/~katfuji/ANAC2023/index.html) which will be held at AAMAS 2023. 
 
 ## Overview
 - directories:
