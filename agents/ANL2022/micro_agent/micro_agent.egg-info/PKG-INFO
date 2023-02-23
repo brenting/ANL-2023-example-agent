@@ -1,0 +1,12 @@
+Metadata-Version: 2.1
+Name: micro-agent
+Version: 1.0.0
+Summary: Implementation of the MiCRO strategy for ANAC 2022. MiCRO is a very simple strategy that just proposes all possible bids of the domain one by one, in order of decreasing utility, as long as the opponent keeps making new proposals as well.
+Home-page: https://www.iiia.csic.es/~davedejonge
+Author: Dave de Jonge
+Author-email: davedejonge@iiia.csic.es
+License: UNKNOWN
+Platform: UNKNOWN
+
+UNKNOWN
+

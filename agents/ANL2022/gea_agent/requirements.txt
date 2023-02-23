@@ -1,0 +1,5 @@
+https://tracinsy.ewi.tudelft.nl/pubtrac/GeniusWebPython/export/93/geniuswebcore/dist/geniusweb-1.2.1.tar.gz
+plotly==5.6.0
+pandas==1.4.1
+numpy==1.22.3
+scikit-learn==1.0.2
