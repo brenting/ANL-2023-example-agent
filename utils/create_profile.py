@@ -128,21 +128,15 @@ class Domain:
 
     @classmethod
     def create_random(cls, name):
-        # def random_values(num_values):
-        #     values = [f"value_{x}" for x in ascii_uppercase[:num_values]]
-        #     return {"values": values}
-
         domain_size = randint(200, 10000)
 
-        # print(domain_size)
         while True:
             num_issues = randint(4, 10)
             spread = dirichlet([1] * num_issues)
-            multiplier = (domain_size / np.prod(spread)) ** (1.0 / randint(3, 7))
+            multiplier = (domain_size / np.prod(spread)) ** (1.0 / num_issues)
             values_per_issue = np.round(multiplier * spread).astype(np.int32)
             values_per_issue = np.clip(values_per_issue, 2, None)
             if abs(domain_size - np.prod(values_per_issue)) < (0.1 * domain_size):
-                # print(np.prod(values_per_issue))
                 break
         issues = list(ascii_uppercase[:num_issues])
 
