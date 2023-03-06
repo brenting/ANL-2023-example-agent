@@ -1,6 +1,6 @@
 # Automated Negotiation League 2023
 Join our [Discord server](https://discord.gg/qvXK3DJTuz)!
-Read the [Call for Participants](docs/ANL_2023_CfP.pdf)!
+Read the [Call for Participants](docs/Automated_Negotiation_League_2023.pdf)!
 
 This is a template repository for the Agent Negotiation League (ANL) of [ANAC](https://web.tuat.ac.jp/~katfuji/ANAC2023/index.html) which will be held at AAMAS 2023. 
 
@@ -37,7 +37,7 @@ The code of GeniusWebPython is properly documented. Exploring the class definiti
 [More documentation can be found here](https://tracinsy.ewi.tudelft.nl/pubtrac/GeniusWebPython/wiki/WikiStart). This documentation was written for the Java version of GeniusWeb, but classes and functionality are identical as much as possible.
 
 ## Notes
-- You are allowed to store data after the negotiation was finished ("Finished" object received) to use for future sessions. This allows for learning opponent behaviour over time and responding to it. The directory to save this data to is passed to the agent as parameter (`storage_dir`). In the template agent the path to this directory is assign to the `self.storage_dir` variable. Your agent is run parallel against multiple opponents during the final tournament, so make sure to handle this properly. Read section 3 of the [CfP](docs/ANL_2022_CfP.pdf) for information on this.
+- You are allowed to store data after the negotiation was finished ("Finished" object received) to use for future sessions. This allows for learning opponent behaviour over time and responding to it. The directory to save this data to is passed to the agent as parameter (`storage_dir`). In the template agent the path to this directory is assign to the `self.storage_dir` variable. Your agent is run parallel against multiple opponents during the final tournament, so make sure to handle this properly. Read section 3 of the [CfP](docs/Automated_Negotiation_League_2023.pdf) for information on this.
 - A simple yet effective opponent model is provided that estimates the utility of the opponent for bids, which is used to find better bids. The estimation is based on the bids that the opponent made so far. You can find the code for this opponent model [here](agents/template_agent/utils/opponent_model.py).
 - The name of the opponent is assigned to the `self.other` variable in the template agent. This name is essential for learning purposes to identify opponents that you have seen in the past.
 - In case you want to generate more domains (see `domains/`), have a look at the `utils/create_domains.py` script. You can run this script to generate domains. The amount of domains to generate can be set by the flag at the start of the script. The same domain generator will be used for the competition.
