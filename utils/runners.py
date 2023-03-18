@@ -2,7 +2,7 @@ import json
 import os
 import shutil
 from collections import defaultdict
-from itertools import combinations, permutations, combinations_with_replacement, product
+from itertools import permutations, product
 from math import factorial, prod
 from pathlib import Path
 from typing import Tuple
@@ -25,7 +25,7 @@ from pyson.ObjectMapper import ObjectMapper
 from uri.uri import URI
 
 from utils.ask_proceed import ask_proceed
-from utils.create_profile import Domain
+from utils.create_domains import Domain
 
 
 def run_session(settings) -> Tuple[dict, dict]:
@@ -316,9 +316,11 @@ def process_tournament_results(tournament_results):
 
 
 def prepare_directories(agents, domains_dir, states_dir, delete_domains=False):
+    # delete storage directory if already exists
     if os.path.exists(states_dir):
         shutil.rmtree(states_dir)
 
+    # create storage directory for every agent for both sides played
     for agent in agents:
         for side in ["A", "B"]:
             agent_name = agent.split(".")[-1]
@@ -326,6 +328,7 @@ def prepare_directories(agents, domains_dir, states_dir, delete_domains=False):
             if not os.path.exists(storage_dir):
                 os.makedirs(storage_dir)
 
+    # delete domains if required
     if delete_domains:
         if os.path.exists(domains_dir):
             shutil.rmtree(domains_dir)
@@ -337,14 +340,17 @@ def run_competition(tournament_settings: dict , states_dir: Path, results_dir: P
     deadline_time_ms = tournament_settings["deadline_time_ms"]
     num_rounds = tournament_settings["num_rounds"]
 
+    # set directory where domains will be generated
     domains_dir = f"domains/ANAC2023/{tournament_settings['tag']}"
 
+    # create list of agent matchups
     agent_combinations = list(product(agents, repeat=2))
     if not tournament_settings["self_play"]:
         agent_combinations = [(x, y) for x, y in agent_combinations if x != y]
 
     prepare_directories(agents, domains_dir, states_dir, delete_domains=True)
 
+    # setup cluster and scale to match the number of match ups
     cluster = SLURMCluster(
         walltime="04:00:00",
         cores=2,
@@ -360,14 +366,17 @@ def run_competition(tournament_settings: dict , states_dir: Path, results_dir: P
 
     tournament_results = []
     tournament_steps = []
+    # iterate over rounds
     for round_num in range(num_rounds):
         print(round_num)
 
+        # gather Dask futures
         session_jobs = [
             execute_session(agents, deadline_time_ms, round_num, domains_dir, states_dir, results_dir)
             for agents in agent_combinations
         ]
 
+        # execute futures
         session_results = client.compute(session_jobs, sync=True)
         
         if not tournament_settings["learning"]:
@@ -377,6 +386,7 @@ def run_competition(tournament_settings: dict , states_dir: Path, results_dir: P
         # tournament_steps.append(settings)
         tournament_results.extend(session_results)
 
+    # process results
     tournament_results_summary = process_tournament_results(tournament_results)
 
     print(tournament_results_summary)
@@ -399,6 +409,7 @@ def execute_session(agents, deadline_time_ms, round_num, domains_dir, states_dir
 
     agent_dicts = [{"class": x, "name": x.split(".")[-1]} for x in agents]
 
+    # if domain does not exist, then create it
     if not Path(f"{domains_dir}/{unique_id}").exists():
         domain = Domain.create_random(unique_id)
         domain.calculate_specials()
