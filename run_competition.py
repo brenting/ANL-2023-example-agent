@@ -67,12 +67,16 @@ if __name__ == "__main__":
     ]
     deadline_time_ms = 60000
     num_rounds = 50
-    self_play = True
+
+    # self play of agents can be enabled for further analysis
+    self_play = False
+
+    # learning can be disabled for further analysis (storage dir is wiped after every session)
+    learning = True
 
     # session specific settings
     settings_list = []
-    for i in range(10):
-        learning = True if i < 5 else False
+    for i in range(5):
         tournament_settings = {
             "agents": agents,
             "tag": f"AIJ_run-{i + 1:03}_learning-{learning}_self-play-{self_play}",
