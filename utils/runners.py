@@ -337,7 +337,7 @@ def run_competition(tournament_settings: dict , states_dir: Path, results_dir: P
     deadline_time_ms = tournament_settings["deadline_time_ms"]
     num_rounds = tournament_settings["num_rounds"]
 
-    domains_dir = f"domains/ANAC2022/{tournament_settings['tag']}"
+    domains_dir = f"domains/ANAC2023/{tournament_settings['tag']}"
 
     agent_combinations = list(product(agents, repeat=2))
     if not tournament_settings["self_play"]:
