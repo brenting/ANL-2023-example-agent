@@ -8,7 +8,7 @@ from .compromising_agent.compromising_agent import CompromisingAgent
 from .dreamteam109_agent.dreamteam109_agent import DreamTeam109Agent
 from .gea_agent.gea_agent import GEAAgent
 from .learning_agent.learning_agent import LearningAgent
-from .LuckyAgent2022_resubmit.LuckyAgent2022 import LuckyAgent2022
+from .LuckyAgent2022.LuckyAgent2022 import LuckyAgent2022
 from .micro_agent.micro_agent.micro_agent import MiCROAgent
 from .Pinar_Agent.Pinar_Agent import Pinar_Agent
 from .procrastin_agent.procrastin_agent import ProcrastinAgent

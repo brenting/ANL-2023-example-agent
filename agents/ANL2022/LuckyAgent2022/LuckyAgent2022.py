@@ -2,6 +2,7 @@
 # author: Arash Ebrahimnezhad
 # Email: Arash.ebrah@gmail.com
 #######################################################
+import json
 import logging
 from random import randint
 import random
@@ -36,7 +37,7 @@ from geniusweb.progress.ProgressTime import ProgressTime
 from geniusweb.references.Parameters import Parameters
 from tudelft_utilities_logging.ReportToLogger import ReportToLogger
 from tudelft.utilities.immutablelist.ImmutableList import ImmutableList
-# from agents.PonPokoAgent.utils.opponent_model import OpponentModel
+from .utils.opponent_model import OpponentModel
 from geniusweb.profile.utilityspace.LinearAdditive import LinearAdditive
 from agents.time_dependent_agent.extended_util_space import ExtendedUtilSpace
 from decimal import Decimal
@@ -104,16 +105,13 @@ class LuckyAgent2022(DefaultParty):
         return m
 
     def set_parameters(self, opp):
-        m_file_name = "m_data_"+opp
-        c_file_name = "c_data_"+opp
-        if not os.path.exists(f"{self.storage_dir}/{m_file_name}") or not os.path.exists(f"{self.storage_dir}/{c_file_name}"):
+        if not self.other or not os.path.exists(f"{self.storage_dir}/m_data_{self.other}"):
             self.min = 0.6
             self.e = 0.05
         else:
             rand_num = random.random()
-
-            saved_data = self.return_saved_data(m_file_name)
-            condition_data = self.return_saved_data(c_file_name)
+            saved_data = self.return_saved_data(f'm_data_{self.other}')
+            condition_data = self.return_saved_data(f'c_data_{self.other}')
             if opp in saved_data:
                 self.good_agreement_u = self.good_agreement_u - \
                     (len(saved_data[opp]) * 0.01)
@@ -208,7 +206,7 @@ class LuckyAgent2022(DefaultParty):
     def return_saved_data(self, file_name):
         # for reading also binary mode is important
         file = open(f"{self.storage_dir}/{file_name}", 'rb')
-        saved_data = pickle.load(file)
+        saved_data = json.load(file)
         file.close()
         return saved_data
 
@@ -279,7 +277,8 @@ class LuckyAgent2022(DefaultParty):
 
         # Finished will be send if the negotiation has ended (through agreement or deadline)
         elif isinstance(data, Finished):
-            self.save_data()
+            if self.other:
+                self.save_data()
             # terminate the agent MUST BE CALLED
             self.logger.log(logging.INFO, "party is terminating:")
             super().terminate()
@@ -370,30 +369,41 @@ class LuckyAgent2022(DefaultParty):
         """
         # **************************************************
 
-        c_file_name = "c_data_"+self.other
         c_data = {}
-        if os.path.isfile(f"{self.storage_dir}/{c_file_name}"):
-            dbfile_c = open(f"{self.storage_dir}/{c_file_name}", 'rb')
-            c_data = pickle.load(dbfile_c)
-            dbfile_c.close()
+        if os.path.isfile(f"{self.storage_dir}/c_data_{self.other}"):
+            # OLD
+            # dbfile_c = open(f"{self.storage_dir}/c_data", 'rb')
+            # c_data = pickle.load(dbfile_c)
+            # dbfile_c.close()
+            # NEW
+            with open(f"{self.storage_dir}/c_data_{self.other}", 'r') as dbfile_c:
+                c_data = json.load(dbfile_c)
 
-        if os.path.exists(f"{self.storage_dir}/{c_file_name}"):
-            os.remove(f"{self.storage_dir}/{c_file_name}")
+        if os.path.exists(f"{self.storage_dir}/c_data_{self.other}"):
+            os.remove(f"{self.storage_dir}/c_data_{self.other}")
 
         c_data[self.other] = self.condition_d
-        dbfile_c = open(f"{self.storage_dir}/{c_file_name}", 'ab')
-        pickle.dump(c_data, dbfile_c)
-        dbfile_c.close()
+        # OLD
+        # dbfile_c = open(f"{self.storage_dir}/c_data", 'ab')
+        # pickle.dump(c_data, dbfile_c)
+        # dbfile_c.close()
+        # NEW
+        with open(f"{self.storage_dir}/c_data_{self.other}", 'w') as dbfile_c:
+            json.dump(c_data, dbfile_c, indent=2)
 
-        m_file_name = "m_data_"+self.other
         m_data = {}
-        if os.path.isfile(f"{self.storage_dir}/{m_file_name}"):
-            dbfile = open(f"{self.storage_dir}/{m_file_name}", 'rb')
-            m_data = pickle.load(dbfile)
-            dbfile.close()
+        if os.path.isfile(f"{self.storage_dir}/m_data_{self.other}"):
+            # OLD
+            # dbfile = open(f"{self.storage_dir}/m_data", 'rb')
+            # m_data = pickle.load(dbfile)
+            # dbfile.close()
+            # NEW
+            with open(f"{self.storage_dir}/m_data_{self.other}", 'r') as dbfile:
+                m_data = json.load(dbfile)
 
-        if os.path.exists(f"{self.storage_dir}/{m_file_name}"):
-            os.remove(f"{self.storage_dir}/{m_file_name}")
+
+        if os.path.exists(f"{self.storage_dir}/m_data_{self.other}"):
+            os.remove(f"{self.storage_dir}/m_data_{self.other}")
 
         m_tuple = (self.agreement_utility, self.min, self.e)
         if self.other in m_data:
@@ -401,11 +411,14 @@ class LuckyAgent2022(DefaultParty):
         else:
             m_data[self.other] = [m_tuple, ]
 
-        dbfile = open(f"{self.storage_dir}/{m_file_name}", 'ab')
-
-        # source, destination
-        pickle.dump(m_data, dbfile)
-        dbfile.close()
+        # OLD
+        # dbfile = open(f"{self.storage_dir}/m_data", 'ab')
+        # # source, destination
+        # pickle.dump(m_data, dbfile)
+        # dbfile.close()
+        # NEW
+        with open(f"{self.storage_dir}/m_data_{self.other}", 'w') as dbfile:
+            json.dump(m_data, dbfile, indent=2)
 
     ###########################################################################################
     ################################## Example methods below ##################################
