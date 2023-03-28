@@ -27,7 +27,7 @@ from geniusweb.progress.ProgressTime import ProgressTime
 from geniusweb.references.Parameters import Parameters
 from tudelft_utilities_logging.ReportToLogger import ReportToLogger
 
-from .utils.opponent_model import OpponentModel
+from .opponent_models.opponent_model import OpponentModel
 
 
 class Group16Agent(DefaultParty):
