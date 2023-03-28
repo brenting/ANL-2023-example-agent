@@ -28,7 +28,8 @@ from geniusweb.references.Parameters import Parameters
 from tudelft_utilities_logging.ReportToLogger import ReportToLogger
 
 from .opponent_models.opponent_model import OpponentModel
-
+from .bidding_strategies.bidding_strategy import BiddingStrategy
+from .acceptance_strategies.acceptance_strategy import AcceptanceStrategy
 
 class Group16Agent(DefaultParty):
     """
@@ -50,10 +51,12 @@ class Group16Agent(DefaultParty):
 
         self.last_received_bid: Bid = None
         self.opponent_model: OpponentModel = None
+        self.bidding_strategy: BiddingStrategy = None
+        self.acceptance_strategy: AcceptanceStrategy = None
         self.logger.log(logging.INFO, "party is initialized")
 
     def notifyChange(self, data: Inform):
-        """MUST BE IMPLEMENTED
+        """
         This is the entry point of all interaction with your agent after is has been initialised.
         How to handle the received data is based on its class type.
 
@@ -80,6 +83,11 @@ class Group16Agent(DefaultParty):
             self.profile = profile_connection.getProfile()
             self.domain = self.profile.getDomain()
             profile_connection.close()
+
+            # initialise BOA components
+            self.opponent_model = OpponentModel(self.domain)
+            self.bidding_strategy = BiddingStrategy(self.profile, self.progress, self.opponent_model)
+            self.acceptance_strategy = AcceptanceStrategy(self.profile, self.progress)
 
         # ActionDone informs you of an action (an offer or an accept)
         # that is performed by one of the agents (including yourself).
@@ -109,7 +117,7 @@ class Group16Agent(DefaultParty):
             self.logger.log(logging.WARNING, "Ignoring unknown info " + str(data))
 
     def getCapabilities(self) -> Capabilities:
-        """MUST BE IMPLEMENTED
+        """
         Method to indicate to the protocol what the capabilities of this agent are.
         Leave it as is for the ANL 2022 competition
 
@@ -163,12 +171,12 @@ class Group16Agent(DefaultParty):
         to perform and send this action to the opponent.
         """
         # check if the last received offer is good enough
-        if self.accept_condition(self.last_received_bid):
+        if self.acceptance_strategy.accept_condition(self.last_received_bid):
             # if so, accept the offer
             action = Accept(self.me, self.last_received_bid)
         else:
             # if not, find a bid to propose as counter offer
-            bid = self.find_bid()
+            bid = self.bidding_strategy.find_bid()
             action = Offer(self.me, bid)
 
         # send the action
@@ -182,66 +190,3 @@ class Group16Agent(DefaultParty):
         data = "Data for learning (see README.md)"
         with open(f"{self.storage_dir}/data.md", "w") as f:
             f.write(data)
-
-    ###########################################################################################
-    ################################## Example methods below ##################################
-    ###########################################################################################
-
-    def accept_condition(self, bid: Bid) -> bool:
-        if bid is None:
-            return False
-
-        # progress of the negotiation session between 0 and 1 (1 is deadline)
-        progress = self.progress.get(time() * 1000)
-
-        # very basic approach that accepts if the offer is valued above 0.7 and
-        # 95% of the time towards the deadline has passed
-        conditions = [
-            self.profile.getUtility(bid) > 0.8,
-            progress > 0.95,
-        ]
-        return all(conditions)
-
-    def find_bid(self) -> Bid:
-        # compose a list of all possible bids
-        domain = self.profile.getDomain()
-        all_bids = AllBidsList(domain)
-
-        best_bid_score = 0.0
-        best_bid = None
-
-        # take 500 attempts to find a bid according to a heuristic score
-        for _ in range(500):
-            bid = all_bids.get(randint(0, all_bids.size() - 1))
-            bid_score = self.score_bid(bid)
-            if bid_score > best_bid_score:
-                best_bid_score, best_bid = bid_score, bid
-
-        return best_bid
-
-    def score_bid(self, bid: Bid, alpha: float = 0.95, eps: float = 0.1) -> float:
-        """Calculate heuristic score for a bid
-
-        Args:
-            bid (Bid): Bid to score
-            alpha (float, optional): Trade-off factor between self interested and
-                altruistic behaviour. Defaults to 0.95.
-            eps (float, optional): Time pressure factor, balances between conceding
-                and Boulware behaviour over time. Defaults to 0.1.
-
-        Returns:
-            float: score
-        """
-        progress = self.progress.get(time() * 1000)
-
-        our_utility = float(self.profile.getUtility(bid))
-
-        time_pressure = 1.0 - progress ** (1 / eps)
-        score = alpha * time_pressure * our_utility
-
-        if self.opponent_model is not None:
-            opponent_utility = self.opponent_model.get_predicted_utility(bid)
-            opponent_score = (1.0 - alpha * time_pressure) * opponent_utility
-            score += opponent_score
-
-        return score
