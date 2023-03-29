@@ -54,6 +54,8 @@ class Group16Agent(DefaultParty):
         self.bidding_strategy: BiddingStrategy = None
         self.acceptance_strategy: AcceptanceStrategy = None
         self.logger.log(logging.INFO, "party is initialized")
+        self._received_bids = []
+        self._sent_bids = []
 
     def notifyChange(self, data: Inform):
         """
@@ -139,13 +141,11 @@ class Group16Agent(DefaultParty):
 
     # give a description of your agent
     def getDescription(self) -> str:
-        """MUST BE IMPLEMENTED
-        Returns a description of your agent. 1 or 2 sentences.
-
+        """
         Returns:
             str: Agent description
         """
-        return "Template agent for the ANL 2022 competition"
+        return "Tradeoff agent with time-dependent concession style."
 
     def opponent_action(self, action):
         """Process an action that was received from the opponent.
@@ -163,6 +163,7 @@ class Group16Agent(DefaultParty):
 
             # update opponent model with bid
             self.opponent_model.update(bid)
+            self._received_bids.append(bid)
             # set bid as last received
             self.last_received_bid = bid
 
@@ -176,7 +177,8 @@ class Group16Agent(DefaultParty):
             action = Accept(self.me, self.last_received_bid)
         else:
             # if not, find a bid to propose as counter offer
-            bid = self.bidding_strategy.find_bid()
+            bid = self.bidding_strategy.find_bid(self.last_received_bid, self._received_bids, self._sent_bids)
+            self._sent_bids.append(bid)
             action = Offer(self.me, bid)
 
         # send the action

@@ -11,47 +11,72 @@ class BiddingStrategy:
         self._profile = profile
         self._progress = progress
         self._opponent_model = opponent_model
+        self._threshold = 0.95
+        self._delta = 0.05
 
-    def find_bid(self) -> Bid:
-        # compose a list of all possible bids
-        domain = self._profile.getDomain()
-        all_bids = AllBidsList(domain)
+    def _sort_bids(self):
+        all_bids = AllBidsList(self._profile.getDomain())
+        bids = []
+        for b in all_bids:
+            bid = {"bid": b, "utility": self._profile.getUtility(b)}
+            bids.append(bid)
+        return sorted(bids, key=lambda d: d['utility'], reverse=True)
 
-        best_bid_score = 0.0
-        best_bid = None
+    def _get_random_bid(self):
+        all_bids = AllBidsList(self._profile.getDomain())
+        return all_bids.get(randint(0, all_bids.size() - 1))
 
-        # take 500 attempts to find a bid according to a heuristic score
-        for _ in range(500):
-            bid = all_bids.get(randint(0, all_bids.size() - 1))
-            bid_score = self._score_bid(bid)
-            if bid_score > best_bid_score:
-                best_bid_score, best_bid = bid_score, bid
+    def _generate_own_similar_bids(self, sorted_bids):
+        "Gather more opportunities as time passes by"
+        similar_bids = []
+        progress = self._progress.get(time() * 1000)
+        n = int(round(progress * 0.001))
+        i = 0
+        for bid in sorted_bids:
+            if (self._threshold + self._delta) > bid["utility"] > (self._threshold - self._delta):
+                similar_bids.append(bid["bid"])
+                i += 1
+            if i == n:
+                break
+        return similar_bids
+
+    def _make_concession(self, received_bids, sent_bids):
+        if len(sent_bids) > 1:
+            sent_utility_1 = self._profile.getUtility(sent_bids[len(sent_bids) - 1])
+            received_utility_1 = self._profile.getUtility(received_bids[len(received_bids) - 1])
+
+            sent_utility_2 = self._profile.getUtility(sent_bids[len(sent_bids) - 2])
+            received_utility_2 = self._profile.getUtility(received_bids[len(received_bids) - 2])
+
+            if sent_utility_1 >= sent_utility_2 and received_utility_1 < received_utility_2:
+                self._threshold -= 0.05
+
+    def find_bid(self, last_opponent_bid, received_bids, sent_bids) -> Bid:
+        # stuck with the algorithm - make concession
+        self._make_concession(received_bids, sent_bids)
+
+        # generate set of bids that maximise own utility
+        sorted_bids = self._sort_bids()
+        bids = self._generate_own_similar_bids(sorted_bids)
+
+        # no opponent bid made so far -> we start negotiation
+        if last_opponent_bid is None:
+            if len(bids) > 0:
+                return bids[0]
+            else:
+                return sorted_bids[0]
+
+        # no bids found to maximise own utility
+        if len(bids) == 0:
+            return self._get_random_bid()
+
+        # find bid that maximises opponent utility from our own selected bids
+        best_bid = bids[0]
+        max_util = 0
+        for bid in bids :
+            opponent_util = self._opponent_model.getUtility(bid)
+            if opponent_util > max_util:
+                best_bid = bid
+                max_util = opponent_util
 
         return best_bid
-
-    def _score_bid(self, bid: Bid, alpha: float = 0.95, eps: float = 0.1) -> float:
-        """Calculate heuristic score for a bid
-
-        Args:
-            bid (Bid): Bid to score
-            alpha (float, optional): Trade-off factor between self interested and
-                altruistic behaviour. Defaults to 0.95.
-            eps (float, optional): Time pressure factor, balances between conceding
-                and Boulware behaviour over time. Defaults to 0.1.
-
-        Returns:
-            float: score
-        """
-        progress = self._progress.get(time() * 1000)
-
-        our_utility = float(self._profile.getUtility(bid))
-
-        time_pressure = 1.0 - progress ** (1 / eps)
-        score = alpha * time_pressure * our_utility
-
-        if self._opponent_model is not None:
-            opponent_utility = self._opponent_model.get_predicted_utility(bid)
-            opponent_score = (1.0 - alpha * time_pressure) * opponent_utility
-            score += opponent_score
-
-        return score
