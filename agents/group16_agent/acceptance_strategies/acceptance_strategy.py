@@ -24,6 +24,7 @@ class AcceptanceStrategy:
         # Determine the minimum acceptable utility based on the progress of the negotiation.
         min_utility = 1.0 - (progress / 3.0)
 
+        # AC const(a)(b) = accept iff u(b) >= a
         if utility >= min_utility:
             return True
 
@@ -32,6 +33,7 @@ class AcceptanceStrategy:
             return random.uniform(0, 1) < 0.5
 
         # Check if the time remaining is less than the ACtime(T) threshold.
+        # ACtime(T) is the fail safe mechanism: an agent may decide its better to have any deal
         if progress >= 0.90 and utility >= self._reservation_value:
             return True
 
