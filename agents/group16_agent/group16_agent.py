@@ -269,7 +269,7 @@ class Group16Agent(DefaultParty):
             if len(bids) > 0:
                 return bids[0]
             else:
-                return sorted_bids[0]
+                return self.get_random_bid()
 
         # no bids found to maximise own utility
         if len(bids) == 0:
@@ -318,14 +318,24 @@ class Group16Agent(DefaultParty):
     ###########################################################################################
     def make_concession(self):
         if len(self.sent_bids) > 1:
-            sent_utility_1 = self.profile.getUtility(self.sent_bids[len(self.sent_bids) - 1])
-            received_utility_1 = self.profile.getUtility(self.received_bids[len(self.received_bids) - 1])
+            sent_utility_1 = self.profile.getUtility(self.sent_bids[-1])
+            received_utility_1 = self.profile.getUtility(self.received_bids[-1])
 
-            sent_utility_2 = self.profile.getUtility(self.sent_bids[len(self.sent_bids) - 2])
-            received_utility_2 = self.profile.getUtility(self.received_bids[len(self.received_bids) - 2])
+            sent_utility_2 = self.profile.getUtility(self.sent_bids[-2])
+            received_utility_2 = self.profile.getUtility(self.received_bids[-2])
 
-            if sent_utility_1 >= sent_utility_2 and received_utility_1 < received_utility_2:
-                self.threshold -= 0.05
+            sent_change = sent_utility_1 - sent_utility_2
+            received_change = received_utility_1 - received_utility_2
+
+            if sent_change > 0 and received_change < 0:
+                if abs(received_change) > abs(sent_change):
+                    concession = float (self.progress.get(time() * 1000))  * float (abs(received_change) / abs(sent_change))
+                else:
+                    concession = float (self.progress.get(time() * 1000) * 0.005)
+            else:
+                concession = self.progress.get(time() * 1000) * 0.005
+
+            self.threshold = float(self.threshold) - float(concession)   # convert decimal to float before subtracting
 
     def sort_bids(self):
         all_bids = AllBidsList(self.profile.getDomain())
