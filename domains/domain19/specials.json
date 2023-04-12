@@ -1,6 +1,19 @@
 {
   "size": 3744,
   "opposition": 0.36856339301080293,
+  "distribution": 0.338797957197548,
+  "social_welfare": {
+    "bid": {
+      "issueA": "valueG",
+      "issueB": "valueV",
+      "issueC": "valueA",
+      "issueD": "valueB"
+    },
+    "utility": [
+      0.73276384,
+      0.8874111151999999
+    ]
+  },
   "nash": {
     "bid": {
       "issueA": "valueG",
